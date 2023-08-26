@@ -43,3 +43,10 @@ class Blog(models.Model):
     create_date = models.DateField(verbose_name='дата создания')
     sign_publication = models.CharField(max_length=100, verbose_name='признак публикации')
     count_views = models.IntegerField(verbose_name='количество просмотров')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Блог'
+        verbose_name_plural = 'Блоги'
