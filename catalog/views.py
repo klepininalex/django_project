@@ -14,4 +14,4 @@ def contact_information(request):
               f'Телефон: {phone}\n'
               f'Сообщение: {message}')
 
-    return render(request, 'catalog/contact_information.html')
+    return render(request, 'catalog/contacts.html')
