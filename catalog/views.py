@@ -7,7 +7,7 @@ from catalog.models import Product, Blog
 
 class ProductListView(ListView):
     model = Product
-    template_name = 'catalog/homepage.html'
+    template_name = 'catalog/product_list.html.html'
 
 
 class ContactsView(TemplateView):
@@ -16,7 +16,7 @@ class ContactsView(TemplateView):
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'catalog/product.html'
+    template_name = 'catalog/product_detail.html'
 
 
 class BlogCreateView(CreateView):
