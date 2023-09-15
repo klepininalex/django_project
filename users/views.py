@@ -3,7 +3,7 @@ from django.views.generic import CreateView
 
 from users.forms import RegisterForm
 from users.models import User
-from users.sevices import send_verification_mail
+from users.services import send_verification_mail
 
 
 class RegisterView(CreateView):
