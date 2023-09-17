@@ -1,13 +1,15 @@
 import random
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView as BaseLoginView
 
-from users.forms import RegisterForm, VerificationForm
+from users.forms import *
 from users.models import User
-from users.services import send_verification_mail
+from users.services import *
 
 
 class RegisterView(CreateView):
@@ -22,12 +24,14 @@ class RegisterView(CreateView):
         self.request.session['key'] = key
         user_email = self.request.POST.get('email')
         send_verification_mail(user_email, key)
+        login(self.request, user)
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('users:verification')
 
 
+@login_required
 def verification_user(request):
     key = request.session.get('key')
     user = request.user
@@ -49,3 +53,18 @@ def success_verification(request):
 
 class LoginView(BaseLoginView):
     template_name = 'users/login.html'
+
+    def get_success_url(self):
+        return reverse_lazy('catalog:product')
+
+
+@login_required
+def set_new_password(request):
+    form = ResetPasswordForm()
+    if request.method == 'POST':
+        new_password = ''.join([str(random.randint(0, 9)) for _ in range(12)])
+        user_email = request.user.email
+        send_new_password(user_email, new_password)
+        request.user.set_password(new_password)
+        request.user.save()
+    return render(request, 'users/password_reset.html', {'form': form})
